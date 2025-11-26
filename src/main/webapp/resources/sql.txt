@@ -1,0 +1,28 @@
+-- 2025-11-26
+-- DB 생성
+
+-- root 계정 생성
+-- jspdb / jspuser / mysql
+create database jspdb;
+
+use mysql;
+
+-- user 생성 
+
+create user 'jspUser'@'localhost' identified by 'mysql';
+grant all privileges on jspdb.* to 'jspUser'@'localhost';
+flush privileges;
+
+-- jspUser 접속
+-- board 테이블 생성
+create table board(
+bno int not null auto_increment,
+title varchar(100) not null,
+writer varchar(100) not null,
+content text,
+regdate datetime default now(),
+moddate datetime default now(),
+primary key(bno)
+); 
+
+
