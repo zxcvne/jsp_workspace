@@ -8,6 +8,8 @@ servlet(jsp) => 화면(jsp) 서버(servlet) DB(mybatis)
 => Dynamic Web Project
 => jsp_project / dynamic web module 4.0
 servlect version 4.0 + jdk 11 + Tomcat 9.0.x
+spring => 화면(jsp) 서버(spring) DB(mybatis) 빌드툴(maven)
+springBoot => 화면(thymeleaf) 서버(springboot) DB(jpa) 빌드툴(gradle)
 
 ---
 
@@ -80,8 +82,29 @@ webapp : 화면 구성 파일(jsp, css, js, image, font)
 
 ---
 
+---
+
 게시판 DB 설정
 
-spring => 화면(jsp) 서버(spring) DB(mybatis) 빌드툴(maven)
+## mybatisConfig.xml
 
-springBoot => 화면(thymeleaf) 서버(springboot) DB(jpa) 빌드툴(gradle)
+---
+
+VO : Value Object(주로 DB 테이블의 객체로 사용되는 값을 정의)
+DTO : Data Transfer Object (데이터 전송 객체) // `VO 묶음`
+DAO : Data Access Obejct (DB에 직접 접근하는 객체)
+ORM : Object-Relational Mapping (객체와 테이블간의 관계를 맵핑)
+
+---
+
+일반 파일변경은 tomcat이 적용해주지만
+xml라인에서 변경사항은 서버를 끄고 다시 시작해야함.
+
+---
+
+게시판 + 댓글 + 파일 + 로그인
+board CRUD + 댓글 + 페이징(검색) + 파일업로드 + 로그인 CRUD
+
+board CRUD (페이징, 검색, 파일업로드, 로그인) - 동기방식
+댓글 - 비동기방식 => js =>
+JSON 라이브러리 => json-simple-1.1.1
