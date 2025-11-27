@@ -1,5 +1,7 @@
 package repository;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,34 @@ public class BoardDAOImpl implements BoardDAO {
 		// 반드시 commit을 해주어야 반영이 됨. => transactionManager 자체 운영
 		if(isOk > 0) sql.commit();
 		
+		return isOk;
+	}
+
+	@Override
+	public List<Board> getList() {
+		// select는 조회만 하기 때문에 commit 불필요
+		List<Board> list = sql.selectList("boardMapper.list");
+		return list;
+	}
+
+	@Override
+	public Board getDetail(int bno) {
+		
+		return sql.selectOne("boardMapper.detail", bno);
+	}
+
+	@Override
+	public int update(Board b) {
+		int isOk = sql.update("boardMapper.update", b);
+		if(isOk > 0) sql.commit();
+		return isOk;
+	}
+
+
+	@Override
+	public int delete(int bno) {
+		int isOk = sql.update("boardMapper.del", bno);
+		if(isOk > 0) sql.commit();
 		return isOk;
 	}
 	

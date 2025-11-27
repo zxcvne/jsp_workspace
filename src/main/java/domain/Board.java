@@ -7,6 +7,9 @@ public class Board {
 	private String writer;
 	private String content;
 	private String regdate;
+	private String moddate;
+	
+	public Board() {}
 	
 	// insert
 	public Board(String title, String writer, String content) {
@@ -17,7 +20,6 @@ public class Board {
 	
 	// list
 	public Board(int bno, String title, String writer, String regdate) {
-		super();
 		this.bno = bno;
 		this.title = title;
 		this.writer = writer;
@@ -83,6 +85,6 @@ public class Board {
 	public void setModdate(String moddate) {
 		this.moddate = moddate;
 	}
-	private String moddate;
+	
 	
 }

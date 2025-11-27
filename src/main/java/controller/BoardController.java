@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -34,8 +35,7 @@ public class BoardController extends HttpServlet {
 	private BoardService bsv; // 인터페이스 => 구현체 BoardServiceImpl
 	
 	
-    public BoardController() {
-    	
+    public BoardController() {	
     	bsv = new BoardServiceImpl();
     
     }
@@ -80,12 +80,65 @@ public class BoardController extends HttpServlet {
 				log.info(" >>> insert {}", (isOk > 0)? "성공" : "실패");
 				
 				// 처리 후 보내야하는 주소
-				destPage = "/index.jsp";
+				destPage = "list";
 				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
+		case "list" :
+			try {
+				// DB의 전체 리스트를 요청
+				List<Board> list = bsv.getList();
+				// info의 첫요소는 문자 그 후에 객체
+				log.info(" >>> list {}", list);
+				// list를 jsp로 보내기
+				request.setAttribute("list", list);
+				destPage="/board/list.jsp";
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case "detail": case "modify" :
+			try {
+				int bno = Integer.parseInt(request.getParameter("bno"));
+				Board board = bsv.getDetail(bno);
+				log.info(" >>> detail {}", board);
+				request.setAttribute("b", board);
+				destPage="/board/"+ path +".jsp";
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case "update" : 
+			try {
+				int bno = Integer.parseInt(request.getParameter("bno"));
+				String title = request.getParameter("title");
+				String content = request.getParameter("content");
+				Board b = new Board(bno, title, content);
+				log.info(" >>> update {}", b);
+				isOk = bsv.update(b);
+				
+				log.info(" >>> update {}", (isOk > 0)? "성공" : "실패");
+				//	response.sendRedirect("detail?bno="+bno);
+				destPage = "detail?bno"+bno;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case "remove" : 
+			try {
+				int bno = Integer.parseInt(request.getParameter("bno"));
+				isOk = bsv.delete(bno);
+				log.info(" >>> remove {}", (isOk > 0)? "성공" : "실패");
+				destPage="list";
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		break;
 		}
 		
 		// 처리가 완료된 만들어진 응답객체를 jsp화면으로 보내기
@@ -94,8 +147,22 @@ public class BoardController extends HttpServlet {
 		// 요청한 객체를 가지고 destPage에 적힌 주소로 이동 (forward)
 		rdp.forward(request, response);
 		
+		// forward : 처리 주체가 WAS(톰켓) => 처리 속도가 빠름
+		// => 처음 요청 URL이 변경되지 않음. 
+		//	/brd/insert 고정되어서 새로고침시 계속 추가
+		//  request.getRequestDispatcher("list").forward(request, response)
+		
+		// redirect : 처리 주체가 Web Browser (was에서 받은 response를 새로운 URL로 다시 Request)
+		// 	=> 요청에 따라 다른 URL로 변경됨.		
 	}
-
+	
+//	private void resForword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		// 처리가 완료된 만들어진 응답객체를 jsp화면으로 보내기
+//				// RequestDispatcher : 데이터를 전달하는 객체 / 어디로 destPage로...
+//				rdp = request.getRequestDispatcher(destPage);
+//				// 요청한 객체를 가지고 destPage에 적힌 주소로 이동 (forward)
+//				rdp.forward(request, response);
+//	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Get으로 오는 요청에 대한 처리를 하고, HTML파일을 생성하여 response 객체를 생성하여 jsp로 전송

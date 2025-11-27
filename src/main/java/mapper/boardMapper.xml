@@ -13,5 +13,22 @@
   		<!-- getter로 값을 가져옴  -->
   		values (#{title}, #{writer}, #{content})
   	</insert>
+  	
+  	<select id="list" resultType="domain.Board">
+  	select * from board order by bno desc
+  	</select>
+  	
+  	<select id="detail" resultType="domain.Board" parameterType="int">
+  	select * from board where bno = #{bno}
+  	</select>
+  	
+  	<update id="update" parameterType="domain.Board">
+  	update board set title=#{title}, content=#{content}, moddate=now()
+  	where bno=#{bno}
+  	</update>
+  	
+  	<delete id="del" parameterType="int">
+  	delete from board where bno=#{bno}
+  	</delete>
   
   </mapper>
