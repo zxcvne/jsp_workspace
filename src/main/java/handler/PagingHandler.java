@@ -17,10 +17,6 @@ public class PagingHandler {
 	private boolean next; // > 다음 페이지의 존재여부
 	private int realEndPage; // 진짜 마지막 페이지
 	
-	
-	
-	
-	
 	public int getRealEndPage() {
 		return realEndPage;
 	}
