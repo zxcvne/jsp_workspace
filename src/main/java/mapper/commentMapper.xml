@@ -11,4 +11,14 @@
   	<select id="list" resultType="domain.Comment">
   	select * from comment where bno=#{bno} order by cno desc
   	</select>
+  	
+  	<delete id="del">
+  	delete from comment where cno=#{cno}
+  	</delete>
+  	
+  	<update id="mod">
+  	update comment set content=#{content}, regdate=now()
+  	where cno=#{cno}
+  	</update>
+  	
   </mapper>

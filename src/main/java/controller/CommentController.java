@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -55,19 +56,21 @@ public class CommentController extends HttpServlet {
 				// 동기 방식 => request.getParameter // 객체를 읽어들임.
 				// 비동기 방식 => 파일 입출력 처럼 읽고(Reader) 쓰기(Writer)
 				// request.getReader / response.getWriter()
-				BufferedReader br = request.getReader();
-				StringBuffer sb = new StringBuffer();
-				String line= "";
-				while((line=br.readLine()) != null) {
-					sb.append(line);
-				}
-				log.info(" >>> sb >> {}", sb.toString());
+//				BufferedReader br = request.getReader();
+//				StringBuffer sb = new StringBuffer();
+//				String line= "";
+//				while((line=br.readLine()) != null) {
+//					sb.append(line);
+//				}
+//				log.info(" >>> sb >> {}", sb.toString());
 				// {"bno":"5","writer":"111","content":"111"}
 				// String -> 객체 형태로 parser => JSONObject => key:value => Comment
 				// 라이브러리 json-simple-1.1.1 JSON parser 라이브러리
 				JSONParser parser = new JSONParser();
-				JSONObject jsonobj = (JSONObject)parser.parse(sb.toString()); // return Object
+//				JSONObject jsonobj = (JSONObject)parser.parse(sb.toString()); // return Object
+				JSONObject jsonobj = (JSONObject)parser.parse(request.getReader()); // return Object
 				log.info(" >>> jsonobj >> {}", jsonobj);
+			
 				
 				int bno = Integer.parseInt(jsonobj.get("bno").toString()); // object => string -> int
 				String writer = jsonobj.get("writer").toString();
@@ -94,11 +97,71 @@ public class CommentController extends HttpServlet {
 				
 				log.info(" >>> cmt list >> {}", list);
 				
+				
+				// JSONArray[] => add / JSONObject [] => put
+				// List<Comment> list => json 형식으로 변환
+				// [{..}, {..}]
+				JSONArray jsonArray = new JSONArray(); // []
+				for(Comment c : list) {
+					JSONObject obj = new JSONObject(); // {} => map
+					obj.put("cno", c.getCno());
+					obj.put("bno", c.getBno());
+					obj.put("writer", c.getWriter());
+					obj.put("content", c.getContent());
+					obj.put("regdate", c.getRegdate());
+					
+					jsonArray.add(obj);
+				}
+				log.info(" >>> jsonArray >> {}", jsonArray);
+				
+				// jsonArray => String 변환을 해야 전송이 가능.
+				 String jsonData = jsonArray.toJSONString();
+				 
+				 PrintWriter out = response.getWriter();
+				 out.print(jsonData);
+				 
 			} catch (Exception e) {
-			
+				e.printStackTrace();
 			}
 			break;
+		case "remove" :
+			try {
+				// ? queryString 은 getParameter로 가져올 수 있음
+				int cno = Integer.parseInt(request.getParameter("cno"));
+				int isOk = csv.delete(cno);
+				log.info(" >> remove >> {}", (isOk>0)? "성공" : "실패");
+				PrintWriter out = response.getWriter();
+				out.print(isOk);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			break;
+		case "modify" :	
+			try {
+				BufferedReader br = request.getReader(); // 받기
+				JSONParser parser = new JSONParser();
+				JSONObject jsonobj = (JSONObject)parser.parse(br); 
+				
+				int cno = Integer.parseInt(jsonobj.get("cno").toString()); 
+				String content = jsonobj.get("content").toString();
+				
+				Comment c = new Comment(cno, content);
+				log.info(" >>> modify cmt >> {}", c);
+				int isOk = csv.update(c);
+				
+				log.info(" >> modify >> {}", (isOk>0)? "성공" : "실패");
+				
+				PrintWriter out = response.getWriter();
+				out.print(isOk);	
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+			
 		}
+			
 	}
 
 

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import domain.Board;
+import domain.PagingVO;
 import orm.DatabasesBuilder;
 
 public class BoardDAOImpl implements BoardDAO {
@@ -60,6 +61,18 @@ public class BoardDAOImpl implements BoardDAO {
 		int isOk = sql.update("boardMapper.del", bno);
 		if(isOk > 0) sql.commit();
 		return isOk;
+	}
+
+	@Override
+	public List<Board> getPageList(PagingVO pgvo) {
+		
+		return sql.selectList("boardMapper.list", pgvo);
+	}
+
+	@Override
+	public int getTotal() {
+		// TODO Auto-generated method stub
+		return sql.selectOne("boardMapper.cnt");
 	}
 	
 }

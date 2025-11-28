@@ -15,7 +15,7 @@
   	</insert>
   	
   	<select id="list" resultType="domain.Board">
-  	select * from board order by bno desc
+  	select * from board order by bno desc limit #{pageStart}, #{qty}
   	</select>
   	
   	<select id="detail" resultType="domain.Board" parameterType="int">
@@ -30,5 +30,9 @@
   	<delete id="del" parameterType="int">
   	delete from board where bno=#{bno}
   	</delete>
+  	
+  	<select id="cnt" resultType="int" >
+  	select count(bno) from board
+  	</select>
   
   </mapper>

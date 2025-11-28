@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import domain.Board;
+import domain.PagingVO;
+import handler.PagingHandler;
 import service.BoardService;
 import service.BoardServiceImpl;
 
@@ -89,11 +91,29 @@ public class BoardController extends HttpServlet {
 		case "list" :
 			try {
 				// DB의 전체 리스트를 요청
-				List<Board> list = bsv.getList();
-				// info의 첫요소는 문자 그 후에 객체
+				// 페이징을 해서 리스트 생성
+				// List<Board> list = bsv.getList();
+				PagingVO pgvo = new PagingVO(); // pageNo=1, qty=10
+				
+				if(request.getParameter("pageNo") != null) {
+					int pageNo = Integer.parseInt(request.getParameter("pageNo"));
+					int qty = Integer.parseInt(request.getParameter("qty"));
+					pgvo = new PagingVO(pageNo, qty);
+				}
+				
+				
+				// select * from board order by bno desc limit #{pageStart}, #{qty}
+				List<Board> list = bsv.getPageList(pgvo);
 				log.info(" >>> list {}", list);
+				
+				int totalCount = bsv.getTotal();
+				
+				PagingHandler ph = new PagingHandler(pgvo, totalCount);
+				log.info(" >>> ph >> {}", ph);
 				// list를 jsp로 보내기
 				request.setAttribute("list", list);
+				request.setAttribute("ph", ph);
+				// info의 첫요소는 문자 그 후에 객체
 				destPage="/board/list.jsp";
 				
 			} catch (Exception e) {

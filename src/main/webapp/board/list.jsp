@@ -26,6 +26,21 @@
 </tr>
 </c:forEach>
 </table>
+<!-- 가져온 ph 정보를 이용하여 하단 forEach를 구성 -->
+<div>
+	<!-- 이전 -->
+	<c:if test="${ph.prev}">
+		<a href="/brd/list?pageNo=${ph.startPage-1 }&qty=${ph.pgvo.qty}"> < </a>
+	</c:if>
+	<c:forEach begin="${ph.startPage}" end="${ph.endPage}" var="i">
+		<a href="/brd/list?pageNo=${i}&qty=${ph.pgvo.qty}">${i}</a> 
+	</c:forEach>
+	<!-- 다음 -->
+	<c:if test="${ph.next}">
+		<a href="/brd/list?pageNo=${ph.endPage+1 }&qty=${ph.pgvo.qty}"> > <a>
+	</c:if>
+</div>
+
 <a href="/index.jsp">index로 이동</a>
 
 </body>

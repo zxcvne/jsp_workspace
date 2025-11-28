@@ -42,7 +42,7 @@ async function postCommentToServer(cmtData) {
     const config = {
       method: "post",
       headers: {
-        "Content-Type": "application/json; charset=urf-8",
+        "Content-Type": "application/json; charset=utf-8",
       },
       body: JSON.stringify(cmtData),
     };
@@ -78,9 +78,9 @@ function printCommentList(bno) {
         str += `<div>`;
         str += `<div>${cmt.cno} / ${cmt.writer} (${cmt.regdate})</div>`;
         str += `<div>`;
-        str += `<input type="text" value="${cmt.content}">`;
-        str += `<button type="button">mod</button>`;
-        str += `<button type="button">del</button>`;
+        str += `<input type="text" class="cmtText" value="${cmt.content}">`;
+        str += `<button type="button" data-cno=${cmt.cno} class="mod">mod</button>`;
+        str += `<button type="button" data-cno=${cmt.cno} class="del">del</button>`;
         str += `</div></div>`;
       }
       div.innerHTML = str;
@@ -89,6 +89,75 @@ function printCommentList(bno) {
       div.innerHTML = `<div>댓글이 없습니다.</div>`;
     }
   });
+}
+
+document.getElementById("commentLine").addEventListener("click", (e) => {
+  if (e.target.classList.contains("mod")) {
+    // 수정
+    let cno = e.target.dataset.cno;
+    // closest : 내 타켓을 기준으로 나에게 가장 가까운 css 선택자를 찾기
+    let div = e.target.closest("div");
+    console.log(div);
+    let cmtText = div.querySelector(".cmtText").value;
+
+    let cmtData = {
+      cno: cno,
+      content: cmtText,
+    };
+    console.log(cmtData);
+
+    // update 비동기 요청
+    updateCommentToServer(cmtData).then((result) => {
+      if (result == "1") {
+        alert("댓글 수정 성공");
+      } else {
+        alert("댓글 수정 실패");
+      }
+      printCommentList(bnoValue);
+    });
+  }
+  if (e.target.classList.contains("del")) {
+    // 삭제
+    let cno = e.target.dataset.cno;
+    removeCommentToServer(cno).then((result) => {
+      if (result == "1") {
+        alert("댓글 삭제 성공");
+      } else {
+        alert("댓글 삭제 실패");
+      }
+      printCommentList(bnoValue);
+    });
+  }
+});
+
+// 수정 비동기 요청
+async function updateCommentToServer(cmtData) {
+  try {
+    const url = "/cmt/modify";
+    const config = {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(cmtData),
+    };
+    const resp = await fetch(url, config);
+    const result = await resp.text(); // isOk
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// 삭제 비동기 요청
+async function removeCommentToServer(cno) {
+  try {
+    const resp = await fetch("/cmt/remove?cno=" + cno);
+    const result = resp.text();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 /*
