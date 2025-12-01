@@ -9,9 +9,9 @@
   <!-- daoImpl => namespace.id => 어느 mapper의 어느 구문을 실행해야할지 결정 -->
   <!-- resultType = "나갈 객체의 타입" / parameterType="들어오는 객체명(생략가능)" -->
   	<insert id="add" parameterType="domain.Board">
-  		insert into board(title, writer, content) 
+  		insert into board(title, writer, content, imagefile) 
   		<!-- getter로 값을 가져옴  -->
-  		values (#{title}, #{writer}, #{content})
+  		values (#{title}, #{writer}, #{content}, #{imagefile})
   	</insert>
 <!-- 데이터 양이 많으면 시간이 오래 걸림 -->  	
 	<!--   	 	
@@ -20,7 +20,7 @@
 	order by bno desc limit #{pageStart}, #{qty} 
 	-->
   	<select id="list" resultType="domain.Board">
-  	 	select a.bno, b.title, b.writer, b.regdate 
+  	 	select a.bno, b.title, b.writer, b.regdate ,b.imagefile
 		from (
 			select bno from board
 			<include refid="search"></include>
@@ -34,7 +34,8 @@
   	</select>
   	
   	<update id="update" parameterType="domain.Board">
-  	update board set title=#{title}, content=#{content}, moddate=now()
+  	update board set title=#{title}, content=#{content},
+  	imagefile=#{imagefile}, moddate=now()
   	where bno=#{bno}
   	</update>
   	

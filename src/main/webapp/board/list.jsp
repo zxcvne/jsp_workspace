@@ -46,7 +46,13 @@
 <c:forEach items="${list}" var="b">
 <tr>
 <td>${b.bno} </td>
-<td><a href="/brd/detail?bno=${b.bno}">${b.title}</a></td>
+<td>
+	<a href="/brd/detail?bno=${b.bno}">
+		<!-- 썸네일 이미지 추가 -->		
+		<img alt="" src="/_fileUpload/th_${b.imagefile}">
+		${b.title}
+	</a>
+</td>
 <td>${b.writer} </td>
 <td>${b.regdate} </td>
 </tr>

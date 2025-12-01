@@ -37,4 +37,7 @@ regdate datetime default now(),
 primary key(cno)
 );
 
+-- 2025-12-01
+alter table board add imagefile varchar(500);
+
 

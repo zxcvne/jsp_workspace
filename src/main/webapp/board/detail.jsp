@@ -9,6 +9,7 @@
 </head>
 <body>
 	<h1>상세 페이지 보기</h1>
+	<img alt="" width="232px" height="100px" src="/_fileUpload/${b.imagefile}">
 	<table border="1">
 		<tr>
 			<th>no.</th>

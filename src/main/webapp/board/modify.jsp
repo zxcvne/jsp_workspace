@@ -9,9 +9,11 @@
 </head>
 <body>
 	<h1>수정 페이지 보기</h1>
-	<form action="/brd/update" method="post">
+	<img alt="" width="305px" height="100px" src="/_fileUpload/${b.imagefile}">
+	<form action="/brd/update" method="post" enctype="multipart/form-data">
 	<!-- input 안만들고 값 보낼 때 사용 -->
 	<input type="hidden" name="bno" value="${b.bno}">
+	<input type="hidden" name="imagefile" value="${b.imagefile}">
 	<table border="1">
 		<tr>
 			<th>no.</th>
@@ -35,7 +37,11 @@
 		</tr>
 		<tr>
 			<th>content</th>
-			<td><textarea rows="10" cols="30" name="title">${b.content}</textarea> </td>
+			<td><textarea rows="10" cols="30" name="content">${b.content}</textarea> </td>
+		</tr>
+		<tr>
+			<th>imageFile</th>
+			<td><input type="file" name="newFile"></td>
 		</tr>
 	</table>
 	<button type="submit">수정</button>

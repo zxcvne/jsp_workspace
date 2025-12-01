@@ -8,14 +8,16 @@ public class Board {
 	private String content;
 	private String regdate;
 	private String moddate;
+	private String imagefile;
 	
 	public Board() {}
 	
 	// insert
-	public Board(String title, String writer, String content) {
+	public Board(String title, String writer, String content, String imagefile) {
 		this.title = title;
 		this.writer = writer;
 		this.content = content;
+		this.imagefile = imagefile;
 	}
 	
 	// list
@@ -26,11 +28,31 @@ public class Board {
 		this.regdate = regdate;
 	}
 	
+	// all
+	public Board(int bno, String title, String writer, String content, String regdate, String moddate,
+			String imagefile) {
+		this.bno = bno;
+		this.title = title;
+		this.writer = writer;
+		this.content = content;
+		this.regdate = regdate;
+		this.moddate = moddate;
+		this.imagefile = imagefile;
+	}
+
 	// update
 	public Board(int bno, String title, String content) {
 		this.bno = bno;
 		this.title = title;
 		this.content = content;
+	}
+	
+	// update
+	public Board(String title, String content, String imagefile ,int bno) {
+		this.bno = bno;
+		this.title = title;
+		this.content = content;
+		this.imagefile = imagefile;
 	}
 	
 	// delete
@@ -42,13 +64,7 @@ public class Board {
 		this.regdate = regdate;
 		this.moddate = moddate;
 	}
-	
-	@Override
-	public String toString() {
-		return "Board [bno=" + bno + ", title=" + title + ", writer=" + writer + ", content=" + content + ", regdate="
-				+ regdate + ", moddate=" + moddate + "]";
-	}
-		
+
 	public int getBno() {
 		return bno;
 	}
@@ -85,6 +101,18 @@ public class Board {
 	public void setModdate(String moddate) {
 		this.moddate = moddate;
 	}
+
+	public String getImagefile() {
+		return imagefile;
+	}
+
+	public void setImagefile(String imagefile) {
+		this.imagefile = imagefile;
+	}
 	
-	
+	@Override
+	public String toString() {
+		return "Board [bno=" + bno + ", title=" + title + ", writer=" + writer + ", content=" + content + ", regdate="
+				+ regdate + ", moddate=" + moddate + ", imagefile=" + imagefile + "]";
+	}
 }
