@@ -10,6 +10,32 @@
 <body>
 <h1>게시판 보기 화면</h1>
 
+<!-- search line -->
+<%-- jsp 주석 --%>
+<%-- ${ == eq | != ne } 비교표현식 --%>
+<%-- 동기식 GET 방식으로 데이터 전송 => 구분 / 검색어 / 페이지 / qty --%>
+<div>
+	<form action="/brd/list" method="get">
+		<div>
+			<select name="type">
+				<option ${ph.pgvo.type eq null ? 'selected' : ''} value="">Choose...</option>
+				<option ${ph.pgvo.type eq 't' ? 'selected' : ''} value="t">title</option>
+				<option ${ph.pgvo.type eq 'w' ? 'selected' : ''} value="w">writer</option>
+				<option ${ph.pgvo.type eq 'c' ? 'selected' : ''} value="c">content</option>
+			</select>
+			<input type="text" name="keyword" placeholder="Search ..." value="${ph.pgvo.keyword}">
+			<input type="hidden" name="pageNo" value="1">
+			<input type="hidden" name="qty" value="${ph.pgvo.qty}">
+			<button type="submit">검색</button>
+			<%-- ${ph.pgvo.type ne null && ph.pgvo.type ne ''}  --%>
+			<c:if test="${not empty ph.pgvo.type}">			
+				<span>totalCount : ${ph.totalCount }</span>
+			</c:if>
+		</div>
+	</form>
+</div>
+<br>
+
 <table border="1">
 <tr>
 <th>no.</th>
@@ -30,14 +56,14 @@
 <div>
 	<!-- 이전 -->
 	<c:if test="${ph.prev}">
-		<a href="/brd/list?pageNo=${ph.startPage-1 }&qty=${ph.pgvo.qty}"> < </a>
+		<a href="/brd/list?pageNo=${ph.startPage-1 }&qty=${ph.pgvo.qty}&type=${ph.pgvo.type}&keyword=${ph.pgvo.keyword}"> < </a>
 	</c:if>
 	<c:forEach begin="${ph.startPage}" end="${ph.endPage}" var="i">
-		<a href="/brd/list?pageNo=${i}&qty=${ph.pgvo.qty}">${i}</a> 
+		<a href="/brd/list?pageNo=${i}&qty=${ph.pgvo.qty}&type=${ph.pgvo.type}&keyword=${ph.pgvo.keyword}">${i}</a> 
 	</c:forEach>
 	<!-- 다음 -->
 	<c:if test="${ph.next}">
-		<a href="/brd/list?pageNo=${ph.endPage+1 }&qty=${ph.pgvo.qty}"> > <a>
+		<a href="/brd/list?pageNo=${ph.endPage+1 }&qty=${ph.pgvo.qty}&type=${ph.pgvo.type}&keyword=${ph.pgvo.keyword}"> > <a>
 	</c:if>
 </div>
 

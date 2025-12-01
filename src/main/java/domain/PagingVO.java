@@ -11,6 +11,8 @@ public class PagingVO {
 	private int qty; // 한 화면에 출력할 게시글 수 (10개)
 	
 	// 검색에 필요한 멤버변수 => type / keyword
+	private String type;
+	private String keyword;
 	
 	public PagingVO() {
 		// 파라미터 없이 첫 리스트를 호출
@@ -18,28 +20,61 @@ public class PagingVO {
 		this.qty = 10;
 	}
 
-	public PagingVO(int pageNo, int qty) {
+	
+	public PagingVO(int pageNo, int qty, String type, String keyword) {
 		this.pageNo = pageNo;
 		this.qty = qty;
+		this.type = type;
+		this.keyword = keyword;
 	}
-	
+
 
 	public int getPageNo() {
 		return pageNo;
 	}
 
+
 	public void setPageNo(int pageNo) {
 		this.pageNo = pageNo;
 	}
+
 
 	public int getQty() {
 		return qty;
 	}
 
+
 	public void setQty(int qty) {
 		this.qty = qty;
 	}
-	
+
+
+	public String getType() {
+		return type;
+	}
+
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+
+	@Override
+	public String toString() {
+		return "PagingVO [pageNo=" + pageNo + ", qty=" + qty + ", type=" + type + ", keyword=" + keyword + "]";
+	}
+
+
 	// 시작 번지 계산 getter
 	//
 	public int getPageStart() {
@@ -48,9 +83,6 @@ public class PagingVO {
 		return (this.pageNo-1)*this.qty;
 	}
 	
-	@Override
-	public String toString() {
-		return "PagingVO [pageNo=" + pageNo + ", qty=" + qty + "]";
-	}
+
 	
 }

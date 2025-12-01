@@ -19,6 +19,6 @@ public interface BoardDAO {
 
 	List<Board> getPageList(PagingVO pgvo);
 
-	int getTotal();
+	int getTotal(PagingVO pgvo);
 
 }

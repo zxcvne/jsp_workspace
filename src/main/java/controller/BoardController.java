@@ -98,15 +98,18 @@ public class BoardController extends HttpServlet {
 				if(request.getParameter("pageNo") != null) {
 					int pageNo = Integer.parseInt(request.getParameter("pageNo"));
 					int qty = Integer.parseInt(request.getParameter("qty"));
-					pgvo = new PagingVO(pageNo, qty);
+					String type = request.getParameter("type");
+					String keyword = request.getParameter("keyword");
+					
+					pgvo = new PagingVO(pageNo, qty, type, keyword);
+					
 				}
-				
 				
 				// select * from board order by bno desc limit #{pageStart}, #{qty}
 				List<Board> list = bsv.getPageList(pgvo);
 				log.info(" >>> list {}", list);
 				
-				int totalCount = bsv.getTotal();
+				int totalCount = bsv.getTotal(pgvo);
 				
 				PagingHandler ph = new PagingHandler(pgvo, totalCount);
 				log.info(" >>> ph >> {}", ph);

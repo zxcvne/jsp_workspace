@@ -13,9 +13,20 @@
   		<!-- getter로 값을 가져옴  -->
   		values (#{title}, #{writer}, #{content})
   	</insert>
-  	
+<!-- 데이터 양이 많으면 시간이 오래 걸림 -->  	
+	<!--   	 	
+	select * from board
+	<include refid="search"></include>
+	order by bno desc limit #{pageStart}, #{qty} 
+	-->
   	<select id="list" resultType="domain.Board">
-  	select * from board order by bno desc limit #{pageStart}, #{qty}
+  	 	select a.bno, b.title, b.writer, b.regdate 
+		from (
+			select bno from board
+			<include refid="search"></include>
+			order by bno desc
+			limit #{pageStart}, #{qty}
+		) a left join board b on a.bno = b.bno
   	</select>
   	
   	<select id="detail" resultType="domain.Board" parameterType="int">
@@ -33,6 +44,26 @@
   	
   	<select id="cnt" resultType="int" >
   	select count(bno) from board
+  		<include refid="search"></include>
   	</select>
+  
+  	<!-- 메서드 처럼 sql도 조각으로 별도 설정해놓을 수 있음. / 언제든 호출 가능 -->
+  	<sql id="search">
+  		<if test="type != null">
+			<trim prefix="where (" suffix=")">
+				<choose>
+					<when test="type == 't'.toString()">
+						title like concat('%', #{keyword},'%') 
+					</when>
+					<when test="type == 'w'.toString()">
+						writer like concat('%', #{keyword},'%') 			
+					</when>
+					<when test="type == 'c'.toString()">
+						content like concat('%', #{keyword},'%')
+					</when>
+				</choose>
+			</trim>  		
+  		</if>
+  	</sql>
   
   </mapper>
