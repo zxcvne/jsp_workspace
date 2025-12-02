@@ -1,6 +1,7 @@
 console.log("boardDetail.js.in");
 console.log("vscode");
 console.log(bnoValue);
+console.log(loginUser);
 
 document.getElementById("cmtAddBtn").addEventListener("click", () => {
   const cmtWriter = document.getElementById("cmtWriter");
@@ -79,8 +80,10 @@ function printCommentList(bno) {
         str += `<div>${cmt.cno} / ${cmt.writer} (${cmt.regdate})</div>`;
         str += `<div>`;
         str += `<input type="text" class="cmtText" value="${cmt.content}">`;
-        str += `<button type="button" data-cno=${cmt.cno} class="mod">mod</button>`;
-        str += `<button type="button" data-cno=${cmt.cno} class="del">del</button>`;
+        if (cmt.writer == loginUser) {
+          str += `<button type="button" data-cno=${cmt.cno} class="mod">mod</button>`;
+          str += `<button type="button" data-cno=${cmt.cno} class="del">del</button>`;
+        }
         str += `</div></div>`;
       }
       div.innerHTML = str;

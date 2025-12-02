@@ -11,7 +11,7 @@
 	<!-- enctype="multipart/form-data" : 첨부파일 보낼때 사용 -->
 	<form action="/brd/insert" method="post" enctype="multipart/form-data">
 	title : <input type="text" name="title" placeholder="title..."> <br>
-	writer : <input type="text" name="writer" placeholder="writer..."> <br> 
+	writer : <input type="text" name="writer" value="${ses.id}" readonly="readonly" placeholder="writer..."> <br> 
 	content : <br>
 	<textarea rows="10" cols="30" name="content" placeholder="content..."></textarea><br>
 	file : <input type="file" name="imagefile">

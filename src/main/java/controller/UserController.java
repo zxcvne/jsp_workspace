@@ -46,6 +46,7 @@ public class UserController extends HttpServlet {
 		switch(path) {		
 		case "register" :
 			destPage = "/member/register.jsp";
+			forwordMethod(request,response);
 			break;
 		case "insert" :
 			try {
@@ -59,7 +60,7 @@ public class UserController extends HttpServlet {
 				
 				log.info(" >>>> insert {}", (isOk>0)? "성공" : "실패");
 				destPage = "/index.jsp";
-				
+				forwordMethod(request,response);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -88,7 +89,7 @@ public class UserController extends HttpServlet {
 					request.setAttribute("login_msg", "notUser");
 				}
 				destPage = "/index.jsp";
-				
+				forwordMethod(request,response);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -105,13 +106,14 @@ public class UserController extends HttpServlet {
 				ses.removeAttribute("ses");
 				ses.invalidate();
 				destPage="/index.jsp";
-				
+				forwordMethod(request,response);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
 		case "modify" : 
 				destPage = "/member/modify.jsp";
+				forwordMethod(request,response);
 			break;
 		case "update" : 
 			try {
@@ -135,9 +137,11 @@ public class UserController extends HttpServlet {
 					request.setAttribute("update_msg", "Fail");
 					destPage = "/member/modify.jsp";
 				}
+				forwordMethod(request,response);
 				
 				log.info(" >>>> update {}", (isOk>0)? "성공" : "실패");
 				destPage="/index.jsp";
+				forwordMethod(request,response);
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -155,21 +159,25 @@ public class UserController extends HttpServlet {
 					ses.invalidate();
 					request.setAttribute("delete_msg", "OK");
 					destPage = "/index.jsp";
+					
 				}else {
 					request.setAttribute("delete_msg", "Fail");
 					destPage = "/member/modify.jsp";
-				}
-				
+				}				
+				forwordMethod(request,response);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
 		}
-		
+
+	}
+
+	private void forwordMethod(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		rdp = request.getRequestDispatcher(destPage);
 		rdp.forward(request, response);
 	}
-
+		
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		service(request, response);
 	}

@@ -46,24 +46,25 @@
 	<!-- comment line -->
 	<div>
 		<h3>comment line</h3>
-		<input type="text" id="cmtWriter" placeholder="writer ..."> <br>
+		<input type="text" id="cmtWriter" value="${ses.id}" readonly="readonly" placeholder="writer ..."> <br>
 		<input type="text" id="cmtText" placeholder="Add Comment ..."> <br>
 		<button type="button" id="cmtAddBtn">post</button>
 	</div>	
 	<!-- 댓글 출력 라인 -->
 	<div id="commentLine">
-		<div>
+		<!-- <div>
 			<div>cno, bno, writer, regdate</div>
 			<div>
 				<input type="text" value="content...">
 				<button type="button">mod</button>
 				<button type="button">del</button>
 			</div>
-		</div>
+		</div> -->
 	</div>
 	
 	<script type="text/javascript">
 	const bnoValue = `<c:out value="${b.bno}"></c:out>`;
+	const loginUser = `<c:out value="${ses.id}"></c:out>`;
 	</script>
 	<script src="/resources/boardDetail.js"></script>
 	<script type="text/javascript">
