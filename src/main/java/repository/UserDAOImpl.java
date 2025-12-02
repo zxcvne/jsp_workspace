@@ -22,5 +22,31 @@ public class UserDAOImpl implements UserDAO {
 		if(isOk > 0) sql.commit();
 		return isOk;
 	}
+
+	@Override
+	public User getUser(User user) {
+		return sql.selectOne("userMapper.getUser", user);
+	}
+
+	@Override
+	public int lastLoginUpdate(String id) {
+		int isOk = sql.update("userMapper.lastLoginUpdate", id);
+		if(isOk > 0) sql.commit();
+		return isOk;
+	}
+
+	@Override
+	public int update(User user) {
+		int isOk = sql.update("userMapper.update", user);
+		if(isOk > 0) sql.commit();
+		return isOk;
+	}
+
+	@Override
+	public int delete(String id) {
+		int isOk = sql.delete("userMapper.del", id);
+		if(isOk > 0) sql.commit();
+		return isOk;
+	}
 	
 }

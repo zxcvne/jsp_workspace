@@ -16,7 +16,6 @@ public class User {
 	}
 
 	public User(String id, String pwd, String email, String phone) {
-		
 		this.id = id;
 		this.pwd = pwd;
 		this.email = email;
@@ -32,8 +31,6 @@ public class User {
 		this.lastlogin = lastlogin;
 	}
 	
-	
-
 
 	public String getId() {
 		return id;

@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +64,108 @@ public class UserController extends HttpServlet {
 				e.printStackTrace();
 			}
 			break;
+		case "login":
+			try {
+				// jsp에서 보낸 파라미터 값 보내기
+				String id = request.getParameter("id");
+				String pwd = request.getParameter("pwd");
+				
+				// id와 pwd가 일치하는 User 객체를 리턴
+				User loginUser = usv.getUser(new User(id, pwd));
+				log.info(">>> logUser {}", loginUser);
+				
+				// loginUser가 있다면...
+				// 모든 jsp에 해당 객체를 인지 시키려면 => session 객체 저장
+				if(loginUser != null) {
+					// session 객체에 저장 => 객체 가져오기
+					HttpSession ses = request.getSession(); // 싱글톤 
+					ses.setAttribute("ses", loginUser); // ses 객체에 loginUser를 저장
+					ses.setMaxInactiveInterval(60*10); // 로그인 유지 시간 초단위
+					log.info(" >>> ses >> {}", ses);
+				}else {
+					// 로그인 객체가 없다면..
+					// index.jsp 페이지로 메시지 전송
+					request.setAttribute("login_msg", "notUser");
+				}
+				destPage = "/index.jsp";
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case "logout":
+			try {
+				// 세션 무효화 (끊기)
+				// 세션의 객체 지우기
+				HttpSession ses = request.getSession();
+				User loginUser =  (User)ses.getAttribute("ses");
+				// 로그인 날짜 기록 => lastLogin
+				int isOk = usv.lastLoginUpdate(loginUser.getId());
+				// 세션에 저장해 놓은 객체 삭제
+				ses.removeAttribute("ses");
+				ses.invalidate();
+				destPage="/index.jsp";
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case "modify" : 
+				destPage = "/member/modify.jsp";
+			break;
+		case "update" : 
+			try {
+				String id = request.getParameter("id");
+				String pwd = request.getParameter("pwd");
+				String email = request.getParameter("email");
+				String phone = request.getParameter("phone");
+				
+				User user = new User(id, pwd, email, phone);
+				log.info(">>> modUser {}", user);
+				int isOk = usv.update(user);
+				
+				// 세션을 끝고 다시 로그인 할 수 있게 유도
+				if(isOk > 0) {
+					HttpSession ses = request.getSession();
+					ses.removeAttribute("ses");
+					ses.invalidate();
+					request.setAttribute("update_msg", "OK");
+					destPage = "/index.jsp";
+				}else {
+					request.setAttribute("update_msg", "Fail");
+					destPage = "/member/modify.jsp";
+				}
+				
+				log.info(" >>>> update {}", (isOk>0)? "성공" : "실패");
+				destPage="/index.jsp";
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case "remove" :
+			try {
+				String id = request.getParameter("id");
+				int isOk = usv.delete(id);
+				log.info(" >>>> delete {}", (isOk>0)? "성공" : "실패");
+				
+				if(isOk > 0) {
+					HttpSession ses = request.getSession();
+					ses.removeAttribute("ses");
+					ses.invalidate();
+					request.setAttribute("delete_msg", "OK");
+					destPage = "/index.jsp";
+				}else {
+					request.setAttribute("delete_msg", "Fail");
+					destPage = "/member/modify.jsp";
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
 		}
+		
 		rdp = request.getRequestDispatcher(destPage);
 		rdp.forward(request, response);
 	}

@@ -20,4 +20,28 @@ public class UserServiceImpl implements UserService {
 	public int insert(User user) {
 		return udao.insert(user);
 	}
+
+	@Override
+	public User getUser(User user) {
+		
+		return udao.getUser(user);
+	}
+
+	@Override
+	public int lastLoginUpdate(String id) {
+	
+		return udao.lastLoginUpdate(id);
+	}
+
+	@Override
+	public int update(User user) {
+		// TODO Auto-generated method stub
+		return udao.update(user);
+	}
+
+	@Override
+	public int delete(String id) {
+		// TODO Auto-generated method stub
+		return udao.delete(id);
+	}
 }

@@ -7,4 +7,16 @@
   insert into user(id, pwd, email, phone)
   values(#{id}, #{pwd}, #{email}, #{phone})
   </insert>
+  <select id="getUser" resultType="domain.User">
+  select * from user where id=#{id} and pwd=#{pwd}
+  </select>
+  <update id="lastLoginUpdate">
+  update user set lastlogin = now() where id=#{id}
+  </update>
+  <update id="update">
+  update user set pwd=#{pwd}, email=#{email}, phone=#{phone}
+  </update>
+  <delete id="del">
+  delete from user where id=#{id}
+  </delete>
   </mapper>
