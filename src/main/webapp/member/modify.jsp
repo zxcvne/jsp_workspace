@@ -18,7 +18,7 @@
 	lastlogin : <input type="text" name="lastlogin" value="${ses.lastlogin}" readonly="readonly"> <br> 
 	<button>수정하기</button>
 	</form>
-	<a href="/user/remove?id=${ses.id}"><button>회원 탈퇴</button></a>
+	<a href="/user/remove"><button>회원 탈퇴</button></a>
 	
 	<script type="text/javascript">
 	const update_msg = `<c:out value="${update_msg}"/>`

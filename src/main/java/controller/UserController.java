@@ -145,12 +145,12 @@ public class UserController extends HttpServlet {
 			break;
 		case "remove" :
 			try {
-				String id = request.getParameter("id");
+				HttpSession ses = request.getSession();
+				String id = ((User)ses.getAttribute("ses")).getId();
 				int isOk = usv.delete(id);
 				log.info(" >>>> delete {}", (isOk>0)? "성공" : "실패");
 				
 				if(isOk > 0) {
-					HttpSession ses = request.getSession();
 					ses.removeAttribute("ses");
 					ses.invalidate();
 					request.setAttribute("delete_msg", "OK");
