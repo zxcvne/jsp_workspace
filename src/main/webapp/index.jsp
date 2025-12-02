@@ -13,5 +13,10 @@
 	<h3><a href="/brd/register">게시판 글쓰기</a></h3>
 	<h3><a href="/brd/list">게시판 리스트보기</a></h3>
 	
+	<h3><a href="/user/register">회원가입</a></h3>
+	<h3><a href="">로그인</a></h3>
+	<h3><a href="">로그아웃</a></h3>
+	<h3><a href="">회원정보수정</a></h3>
+	
 </body>
 </html>

@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import domain.Board;
 import domain.PagingVO;
+import handler.FileRemoveHandler;
 import handler.PagingHandler;
 import net.coobird.thumbnailator.Thumbnails;
 import service.BoardService;
@@ -49,7 +50,6 @@ public class BoardController extends HttpServlet {
     
     }
 
-	
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// get / post로 오는 모든 요청을 service에서 처리
 		log.info(">>> BoardController Service method in Test!!");
@@ -264,6 +264,9 @@ public class BoardController extends HttpServlet {
 							// 새로 추가되는 파일이 있는 경우
 							if(old_file != null) {
 								// old_file 삭제 작업
+								// fileRemoveHandler를 통해서 파일 삭제 작업 진행
+								FileRemoveHandler fh = new FileRemoveHandler();
+								boolean isDel = fh.deleteFile(savePath, old_file);
 							}
 							// 새파일 등록 작업
 							String fileName = System.currentTimeMillis()+ "_" + item.getName();

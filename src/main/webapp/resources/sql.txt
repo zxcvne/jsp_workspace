@@ -40,4 +40,16 @@ primary key(cno)
 -- 2025-12-01
 alter table board add imagefile varchar(500);
 
+-- 2025-12-02
+-- id/pw/email/phone/regdate/lastlogin
+create table user(
+id varchar(100) not null,
+pwd varchar(100) not null,
+email varchar(100) not null,
+phone varchar(50),
+regdate datetime default now(),
+lastlogin datetime default now(),
+primary key(id)
+);
+
 
